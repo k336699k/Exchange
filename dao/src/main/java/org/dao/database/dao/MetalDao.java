@@ -1,23 +1,22 @@
 package org.dao.database.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dao.database.dbutils.DBUtils;
 import org.dao.database.pool.ConnectionPool;
 import org.entity.Metal;
+import org.resource.SqlManager;
+
+import exception.DAOException;
 
 public class MetalDao extends AbstractDAO<Metal> {
-	public static final String SQL_INSERT_METAL = "INSERT INTO metals (title, quantity, price) VALUES (?,?,?)";
-	public static final String SQL_GET_METALS = "SELECT * FROM metals";
-	public static final String SQL_GET_ONE_METAL = "SELECT * FROM metals WHERE title=?";
-	public static final String SQL_DELETE_ONE_METAL = "DELETE FROM metals WHERE title=?";
-	private static MetalDao instance;
+	private static final Logger LOGGER = Logger.getLogger(MetalDao.class);
+	
+	private static volatile MetalDao instance;
 
 	private MetalDao() {
 	}
@@ -36,13 +35,14 @@ public class MetalDao extends AbstractDAO<Metal> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_INSERT_METAL);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_INSERT_METAL"));
 			preparedStatement.setString(1, metal.getTitle());
 			preparedStatement.setString(2, metal.getQuantity());
 			preparedStatement.setInt(3, metal.getPrice());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
@@ -57,12 +57,13 @@ public class MetalDao extends AbstractDAO<Metal> {
 		ResultSet resultSet = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_GET_ONE_METAL);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_GET_ONE_METAL"));
 			preparedStatement.setString(1, title);
 			resultSet = preparedStatement.executeQuery();
 			metal = initSubstance(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, resultSet, connection);
 		}
@@ -81,8 +82,8 @@ public class MetalDao extends AbstractDAO<Metal> {
 
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return metal;
 	}
@@ -97,10 +98,11 @@ public class MetalDao extends AbstractDAO<Metal> {
 		try {
 			connection = connectionPool.getConnection();
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery(SQL_GET_METALS);
+			resultSet = statement.executeQuery(SqlManager.getProperty("SQL_GET_METALS"));
 			metals = (List<Metal>) initSubstances(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(statement, resultSet, connection);
 		}
@@ -120,8 +122,8 @@ public class MetalDao extends AbstractDAO<Metal> {
 				metals.add(metal);
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return metals;
 	}
@@ -134,11 +136,12 @@ public class MetalDao extends AbstractDAO<Metal> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_DELETE_ONE_METAL);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_DELETE_ONE_METAL"));
 			preparedStatement.setString(1, title);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}

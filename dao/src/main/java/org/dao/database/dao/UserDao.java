@@ -8,16 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dao.database.dbutils.DBUtils;
 import org.dao.database.pool.ConnectionPool;
 import org.entity.User;
+import org.resource.SqlManager;
 
-public class UserDao extends AbstractDAO<User> {
-	public static final String SQL_INSERT_USER = "INSERT INTO users (first_name, last_name, login, password) VALUES (?,?,?,?)";
-	public static final String SQL_GET_USERS = "SELECT * FROM users";
-	public static final String SQL_GET_ONE_USER = "SELECT * FROM users WHERE login=?";
-	public static final String SQL_DELETE_ONE_USER = "DELETE FROM users WHERE login=?";
-	private static UserDao instance;
+import exception.DAOException;
+
+public class UserDao extends AbstractDAO<User> implements UserDaoInterface {
+	private static final Logger LOGGER = Logger.getLogger(UserDao.class);
+	
+	private static volatile UserDao instance;
 
 	private UserDao() {
 	}
@@ -36,14 +38,15 @@ public class UserDao extends AbstractDAO<User> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_INSERT_USER);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_INSERT_USER"));
 			preparedStatement.setString(1, user.getFirstName());
 			preparedStatement.setString(2, user.getLastName());
 			preparedStatement.setString(3, user.getLogin());
 			preparedStatement.setString(4, user.getPassword());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
@@ -58,12 +61,13 @@ public class UserDao extends AbstractDAO<User> {
 		ResultSet resultSet = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_GET_ONE_USER);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_GET_ONE_USER"));
 			preparedStatement.setString(1, login);
 			resultSet = preparedStatement.executeQuery();
 			user = initSubstance(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, resultSet, connection);
 		}
@@ -83,8 +87,8 @@ public class UserDao extends AbstractDAO<User> {
 
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return user;
 	}
@@ -99,10 +103,11 @@ public class UserDao extends AbstractDAO<User> {
 		try {
 			connection = connectionPool.getConnection();
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery(SQL_GET_USERS);
+			resultSet = statement.executeQuery(SqlManager.getProperty("SQL_GET_USERS"));
 			users = (List<User>) initSubstances(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(statement, resultSet, connection);
 		}
@@ -123,8 +128,8 @@ public class UserDao extends AbstractDAO<User> {
 				users.add(user);
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return users;
 	}
@@ -137,14 +142,38 @@ public class UserDao extends AbstractDAO<User> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_DELETE_ONE_USER);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_DELETE_ONE_USER"));
 			preparedStatement.setString(1, login);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
+	}
+
+	@Override
+	public User getUser(String login, String password) {
+		User user = null;
+		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = connectionPool.getConnection();
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_CHECK_LOGIN"));
+			preparedStatement.setString(1, login);
+			preparedStatement.setString(2, password);
+			resultSet = preparedStatement.executeQuery();
+			user = initSubstance(resultSet);
+		} catch (SQLException e) {
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
+		} finally {
+			DBUtils.close(preparedStatement, resultSet, connection);
+		}
+		return user;
 	}
 
 }

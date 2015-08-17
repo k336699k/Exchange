@@ -1,3 +1,6 @@
+cd /d E:\ENV\apache-tomcat-7.0.55\bin
+catalina start
+
 MKDIR e:\exc\
 cd /D e:\exc\
 git clone -b master https://github.com/k336699k/Exchange.git
@@ -5,7 +8,5 @@ git clone -b master https://github.com/k336699k/Exchange.git
 
 
 cd /d e:\exc\Exchange\
-call mvn clean install
+call mvn tomcat7:redeploy
 
-cd dao\target\
-java -jar dao-0.0.1-SNAPSHOT.jar

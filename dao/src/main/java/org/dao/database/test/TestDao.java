@@ -8,6 +8,8 @@ import org.dao.database.dao.UserDao;
 import org.entity.Metal;
 import org.entity.Role;
 import org.entity.User;
+import org.resource.SqlManager;
+
 
 public class TestDao {
 
@@ -31,7 +33,7 @@ public class TestDao {
 
 		ArrayList<Metal> metals = (ArrayList<Metal>) MetalDao.getInstance().readSubstances();
 		for (Metal met : metals) {
-			System.out.println("metals = " + met);
+		System.out.println("metals = " + met);
 		}
 		System.out.println("metals = " + MetalDao.getInstance().findSubstance("Арматура 20"));
 		MetalDao.getInstance().removeSubstance("Арматура 14");
@@ -45,7 +47,8 @@ public class TestDao {
 			System.out.println("users = " + us);
 		}
 		System.out.println("users = " + UserDao.getInstance().findSubstance("k336699k@mail.ru"));
-//	UserDao.getInstance().removeSubstance("nikita@tut.by");
-
+		System.out.println("users = " + UserDao.getInstance().getUser("k336699k@mail.ru", "123456"));
+		UserDao.getInstance().removeSubstance("nikita@tut.by");
+  	      	  System.out.println(SqlManager.getProperty("SQL_INSERT_METAL"));
 	}
 }

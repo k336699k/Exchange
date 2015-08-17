@@ -1,23 +1,22 @@
 package org.dao.database.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dao.database.dbutils.DBUtils;
 import org.dao.database.pool.ConnectionPool;
 import org.entity.Role;
+import org.resource.SqlManager;
+
+import exception.DAOException;
 
 public class RoleDao extends AbstractDAO<Role> {
-	public static final String SQL_INSERT_ROLE = "INSERT INTO roles (name) VALUES (?)";
-	public static final String SQL_GET_ROLES = "SELECT * FROM roles";
-	public static final String SQL_GET_ONE_ROLE = "SELECT * FROM roles WHERE name=?";
-	public static final String SQL_DELETE_ONE_ROLE = "DELETE FROM roles WHERE name=?";
-	private static RoleDao instance;
+	private static final Logger LOGGER = Logger.getLogger(RoleDao.class);
+	
+	private static volatile RoleDao instance;
 
 	private RoleDao() {
 	}
@@ -36,11 +35,12 @@ public class RoleDao extends AbstractDAO<Role> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_INSERT_ROLE);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_INSERT_ROLE"));
 			preparedStatement.setString(1, role.getName());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
@@ -55,12 +55,13 @@ public class RoleDao extends AbstractDAO<Role> {
 		ResultSet resultSet = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_GET_ONE_ROLE);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_GET_ONE_ROLE"));
 			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
 			role = initSubstance(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, resultSet, connection);
 		}
@@ -77,8 +78,8 @@ public class RoleDao extends AbstractDAO<Role> {
 
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return role;
 	}
@@ -93,10 +94,11 @@ public class RoleDao extends AbstractDAO<Role> {
 		try {
 			connection = connectionPool.getConnection();
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery(SQL_GET_ROLES);
+			resultSet = statement.executeQuery(SqlManager.getProperty("SQL_GET_ROLES"));
 			roles = (List<Role>) initSubstances(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(statement, resultSet, connection);
 		}
@@ -114,8 +116,8 @@ public class RoleDao extends AbstractDAO<Role> {
 				roles.add(role);
 			}
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		}
 		return roles;
 	}
@@ -128,11 +130,12 @@ public class RoleDao extends AbstractDAO<Role> {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = connectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_DELETE_ONE_ROLE);
+			preparedStatement = connection.prepareStatement(SqlManager.getProperty("SQL_DELETE_ONE_ROLE"));
 			preparedStatement.setString(1, name);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
+			LOGGER.error("DAOException", e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}

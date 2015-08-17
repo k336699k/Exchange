@@ -10,6 +10,8 @@ import java.util.List;
 import org.dao.database.dbutils.DBUtils;
 import org.dao.database.pool.ConnectionPool;
 
+import exception.DAOException;
+
 public abstract class AbstractDAO<T> implements GenericDao<T> {
 
 	@Override
@@ -23,7 +25,7 @@ public abstract class AbstractDAO<T> implements GenericDao<T> {
 			preparedStatement.setString(1, "T");
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
@@ -43,7 +45,7 @@ public abstract class AbstractDAO<T> implements GenericDao<T> {
 			resultSet = preparedStatement.executeQuery();
 			t = initSubstance(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 new DAOException(e);
 		} finally {
 			DBUtils.close(preparedStatement, resultSet, connection);
 		}
@@ -66,7 +68,7 @@ public abstract class AbstractDAO<T> implements GenericDao<T> {
 			resultSet = statement.executeQuery("SQL_GET_ROLES");
 			t = (List<T>) initSubstances(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
 		} finally {
 			DBUtils.close(statement, resultSet, connection);
 		}
@@ -88,7 +90,7 @@ public abstract class AbstractDAO<T> implements GenericDao<T> {
 			preparedStatement.setString(1, name);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			new DAOException(e);
 		} finally {
 			DBUtils.close(preparedStatement, connection);
 		}
