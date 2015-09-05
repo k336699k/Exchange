@@ -2,6 +2,7 @@ package command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.resource.ConfigurationManager;
 import org.resource.MessageManager;
@@ -12,12 +13,14 @@ public class LoginCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
-        String page = null;
+    	HttpSession session = request.getSession();
+    	String page = null;
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
         UserService userService = new UserService();
         if (userService.checkLogin(login, pass)) {
             request.setAttribute("user", login);
+            session.setAttribute("login", login);
             page = ConfigurationManager.getProperty("path.page.main");
         } else {
             request.setAttribute("errorLoginPassMessage",

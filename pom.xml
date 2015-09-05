@@ -16,7 +16,7 @@
 		<module>web</module>
 	</modules>
 	<build>
-		<finalName>JerseyHelloWorld</finalName>
+		<finalName>Exchange</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -21,6 +21,17 @@
 		<filter-name>PageRedirectSecurityFilter</filter-name>
 		<filter-class>filter.PageRedirectSecurityFilter</filter-class>
 	</filter>
+	<filter>
+		<description>
+		</description>
+		<display-name>ServletSecurityFilter</display-name>
+		<filter-name>ServletSecurityFilter</filter-name>
+		<filter-class>filter.ServletSecurityFilter</filter-class>
+		<init-param>
+			<param-name>SERVLET_PATH</param-name>
+			<param-value>/index.jsp</param-value>
+		</init-param>
+	</filter>
 	<filter-mapping>
 		<filter-name>EncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -28,6 +39,10 @@
 	<filter-mapping>
 		<filter-name>PageRedirectSecurityFilter</filter-name>
 		<url-pattern>/jsp/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletSecurityFilter</filter-name>
+		<url-pattern>/controller</url-pattern>
 	</filter-mapping>
 
 	<servlet>

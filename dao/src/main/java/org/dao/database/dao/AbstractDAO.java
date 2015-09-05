@@ -66,7 +66,7 @@ public abstract class AbstractDAO<T> implements GenericDao<T> {
 			connection = connectionPool.getConnection();
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SQL_GET_ROLES");
-			t = (List<T>) initSubstances(resultSet);
+			t =  initSubstances(resultSet);
 		} catch (SQLException e) {
 			new DAOException(e);
 		} finally {
