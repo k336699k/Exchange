@@ -1,54 +1,55 @@
 package org.dao.database.test;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 
-import org.dao.database.dao.MetalDao;
-import org.dao.database.dao.RoleDao;
-import org.dao.database.dao.UserDao;
+import org.dao.MetalDao;
+import org.dao.RoleDao;
+import org.dao.UserDao;
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.MetalDaoInterface;
+import org.dao.iterface.RoleDaoInterface;
+import org.dao.iterface.UserDaoInterface;
 import org.entity.Metal;
 import org.entity.Role;
 import org.entity.User;
-import org.resource.SqlManager;
-
 
 public class TestDao {
 
-	public static void main(String[] args) {
-
-		System.out.println("Тестирование класса Role");
-
-		Role role = new Role("Администратор");
-		RoleDao.getInstance().addSubstance(role);
-
-		ArrayList<Role> roles = (ArrayList<Role>) RoleDao.getInstance().readSubstances();
-		for (Role rol : roles) {
-			System.out.println("roles = " + rol);
-		}
-		System.out.println("roles = " + RoleDao.getInstance().findSubstance("Продавец"));
-		RoleDao.getInstance().removeSubstance("Администратор");
-
-		System.out.println("Тестирование класса Metal");
-		Metal metal = new Metal("Арматура 14", "2 т", 3000);
-		MetalDao.getInstance().addSubstance(metal);
-
-		ArrayList<Metal> metals = (ArrayList<Metal>) MetalDao.getInstance().readSubstances();
-		for (Metal met : metals) {
-		System.out.println("metals = " + met);
-		}
-		System.out.println("metals = " + MetalDao.getInstance().findSubstance("Арматура 20"));
-		MetalDao.getInstance().removeSubstance("Арматура 14");
+	public static void main(String[] args) throws SQLException {
 
 		System.out.println("Тестирование класса User");
 		User user = new User("Никита", "Батюшков", "nikita@tut.by", "43498");
-		UserDao.getInstance().addSubstance(user);
+		UserDaoInterface userDao = UserDao.getInstance();
+		GenericDao<User> userGenericDao = UserDao.getInstance();
+	    userDao.addSubstance(user);
+	    userDao.updateSubstance("nikita@tut.by", "Продавец");
 
-		ArrayList<User> users = (ArrayList<User>) UserDao.getInstance().readSubstances();
-		for (User us : users) {
-			System.out.println("users = " + us);
-		}
-		System.out.println("users = " + UserDao.getInstance().findSubstance("k336699k@mail.ru"));
-		System.out.println("users = " + UserDao.getInstance().getUser("k336699k@mail.ru", "123456"));
-		UserDao.getInstance().removeSubstance("nikita@tut.by");
-  	      	  System.out.println(SqlManager.getProperty("SQL_INSERT_METAL"));
+		System.out.println(userDao.getUserByRole("Продавец"));
+		System.out.println(userDao.getUser("k336699k@mail.ru", "123456"));
+		System.out.println(userGenericDao.readSubstances());
+		System.out.println(userGenericDao.findSubstance("h_v_e@mail.ru"));
+		userGenericDao.removeSubstance("nikita@tut.by");
+	
+
+		System.out.println("Тестирование класса Metal");
+		Metal metal = new Metal("Арматура 34", "2 т", 3000);
+		MetalDaoInterface metalDao = MetalDao.getInstance();
+		GenericDao<Metal> metalGenericDao = MetalDao.getInstance();
+		metalDao.addSubstance(metal);
+		System.out.println(metalGenericDao.findSubstance("Арматура 20"));
+		System.out.println(metalGenericDao.readSubstances());
+		metalGenericDao.removeSubstance("Арматура 34");
+
+		System.out.println("Тестирование класса Role");
+		Role role = new Role("Начальник");
+		RoleDaoInterface roleDao = RoleDao.getInstance();
+		GenericDao<Role> roleGenericDao = RoleDao.getInstance();
+		roleDao.addSubstance(role);
+		System.out.println(roleGenericDao .findSubstance("Администратор"));
+		System.out.println(roleGenericDao .readSubstances());
+		roleGenericDao .removeSubstance("Начальник");
+		System.out.println(roleDao.getRoleByUser("k336699k@mail.ru"));
+
 	}
+
 }

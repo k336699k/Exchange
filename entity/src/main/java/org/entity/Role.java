@@ -1,8 +1,16 @@
 package org.entity;
 
-public class Role {
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Role implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private int iD;
 	private String name;
+	private Set<User> users = new HashSet<>();
+	
 
 	public Role() {
 
@@ -11,6 +19,16 @@ public class Role {
 	public Role(String name) {
 		super();
 		this.name = name;
+	}
+
+	
+	
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	public int getiD() {

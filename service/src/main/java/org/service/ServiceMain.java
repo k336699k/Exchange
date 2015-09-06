@@ -2,8 +2,8 @@ package org.service;
 
 import java.util.ArrayList;
 
-import org.dao.database.dao.MetalDao;
-import org.dao.database.dao.RoleDao;
+import org.dao.MetalDao;
+import org.dao.RoleDao;
 import org.entity.Metal;
 import org.entity.Role;
 import org.entity.User;
@@ -16,7 +16,7 @@ public class ServiceMain {
 		UserService userService = new UserService();
 		userService.addUser("Никита", "Батюшков", "nikita@tut.by", "43498");
 		System.out.println("users = " + userService.getUser("k336699k@mail.ru", "123456"));
-	//	userService.deleteUser("nikita@tut.by");
+		userService.deleteUser("nikita@tut.by");
 
 		System.out.println("Тестирование класса Metal");
 		Metal metal = new Metal("Арматура 14", "2 т", 3000);
@@ -30,16 +30,16 @@ public class ServiceMain {
 		MetalDao.getInstance().removeSubstance("Арматура 14");
 		
 		System.out.println("Тестирование класса Role");
-		Role role = new Role("Администратор");
+		Role role = new Role("Начальник");
 		RoleService roleService = new RoleService();
-		roleService.addRole("Администратор");
+		roleService.addRole("Начальник");
         System.out.println("roles = " + roleService.findRole("Продавец"));
 		ArrayList<Role> roles = (ArrayList<Role>) roleService.readRole();
 		for (Role rol : roles) {
 			System.out.println("roles = " + rol);
 		}
 		
-		roleService.removeRole("Администратор");
+		roleService.removeRole("Начальник");
 
 	}
 

@@ -3,8 +3,8 @@ package org.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dao.database.dao.GenericDao;
-
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.RoleDaoInterface;
 import org.entity.Role;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -14,7 +14,8 @@ import org.junit.Test;
 public class RoleServiceTest {
 	private Mockery context = new JUnit4Mockery();
 	final GenericDao<Role> roleGenericDAO = context.mock(GenericDao.class);
-
+	final RoleDaoInterface roleDAO = context.mock(RoleDaoInterface.class);
+	
 	@Test
 	public void testReadRole() {
 
@@ -54,12 +55,12 @@ public class RoleServiceTest {
 		final Role role = new Role("Администратор");
 		context.checking(new Expectations() {
 			{
-				oneOf(roleGenericDAO).addSubstance(role);
+				oneOf(roleDAO).addSubstance(role);
 
 			}
 		});
 		RoleService roleService = new RoleService();
-		roleService.setRoleGenericDao(roleGenericDAO);
+		roleService.setRoleDao(roleDAO);
 		roleService.addRole("Администратор");
 	}
 

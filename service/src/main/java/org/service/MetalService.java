@@ -4,22 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dao.database.dao.GenericDao;
-import org.dao.database.dao.MetalDao;
-import org.dao.database.dao.UserDao;
-import org.dao.database.dao.UserDaoInterface;
+import org.dao.MetalDao;
+import org.dao.UserDao;
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.MetalDaoInterface;
+import org.dao.iterface.UserDaoInterface;
 import org.entity.Metal;
 import org.entity.User;
 import org.exception.ServiceException;
 
 public class MetalService implements MetalServiceInterface {
 	private GenericDao<Metal> metalGenericDao = null;
+	private MetalDaoInterface metalDao = null;
 	private static final Logger LOGGER = Logger.getLogger(MetalService.class);
 	
 	
 	
 	public MetalService() {
 		metalGenericDao = MetalDao.getInstance();
+		metalDao = MetalDao.getInstance();
+	}
+
+
+
+	public MetalDaoInterface getMetalDao() {
+		if (metalDao == null){
+			LOGGER.error("I could not create MetalDAO. MetalDAO in null.");
+			new ServiceException("I could not create MetalDAO. MetalDAO in null.");
+		}
+		return metalDao;
+	}
+
+
+
+	public void setMetalDao(MetalDaoInterface metalDao) {
+		this.metalDao = metalDao;
 	}
 
 
@@ -43,7 +62,7 @@ public class MetalService implements MetalServiceInterface {
 	@Override
 	public void addMetal(String title, String quantity, int price) {
 		Metal metal = new Metal(title, quantity, price);
-		getMetalGenericDao().addSubstance(metal);
+		getMetalDao().addSubstance(metal);
 		LOGGER.info("Metal added, its name: " + title);
 	}
 	

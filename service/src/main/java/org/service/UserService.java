@@ -1,10 +1,12 @@
 package org.service;
 
+import java.sql.SQLException;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
-import org.dao.database.dao.GenericDao;
-import org.dao.database.dao.UserDao;
-import org.dao.database.dao.UserDaoInterface;
+import org.dao.UserDao;
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.UserDaoInterface;
 import org.entity.User;
 import org.exception.ServiceException;
 
@@ -14,9 +16,6 @@ public class UserService implements UserServiceInterface {
 	private UserDaoInterface userDao = UserDao.getInstance();
 
 	
-	
-	
-
 	public GenericDao<User> getUserGenericDao() {
 		if (userGenericDao == null) {
 			LOGGER.error("I could not create UserDAO across GenericDao. UserDAO in null.");
@@ -68,7 +67,7 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public void addUser(String firstName, String lastName, String login, String password) {
 		User user = new User(firstName, lastName, login, password);
-		getUserGenericDao().addSubstance(user);
+		getUserDao().addSubstance(user);
 		LOGGER.info("launched method addUser() in UserService");
 	}
 	

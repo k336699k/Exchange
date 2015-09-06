@@ -2,9 +2,9 @@ package org.service;
 
 import static org.junit.Assert.*;
 
-import org.dao.database.dao.GenericDao;
-import org.dao.database.dao.UserDao;
-import org.dao.database.dao.UserDaoInterface;
+import org.dao.UserDao;
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.UserDaoInterface;
 import org.entity.User;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -15,21 +15,23 @@ public class UserServiceTest {
 	
 	private Mockery context = new JUnit4Mockery();
 	final GenericDao <User> userGenericDAO= context.mock(GenericDao.class);
+	final UserDaoInterface userDAO= context.mock(UserDaoInterface.class);
+
 	@Test
 	public void testGetUser() {
-		final UserDaoInterface userDao= context.mock(UserDaoInterface.class);
+	//	final UserDaoInterface userDao= context.mock(UserDaoInterface.class);
 		final String login = "k336699k@mail.ru";
 		final String password = "123456";
 		final User user = new User("Константин", "Шаплыко", "k336699k@mail.ru", "123456");
 		context.checking(new Expectations() {
 			{
-				oneOf(userDao).getUser(login, password);
+				oneOf(userDAO).getUser(login, password);
 				will(returnValue(user));
 			}
 		});
 		UserService userService = new UserService ();
 		User userNew = new User();
-		userService.setUserDao(userDao);
+		userService.setUserDao(userDAO);
 		userNew  = userService.getUser(login, password);
 	//	assertEquals(user,userNew);
 	//	assertEquals(user.getPassword(),userNew.getPassword());
@@ -41,12 +43,12 @@ public class UserServiceTest {
 		final User user = new User("Константин", "Шаплыко", "k336699k@mail.ru", "123456");
 		context.checking(new Expectations() {
 			{
-				oneOf(userGenericDAO).addSubstance(user);
+				oneOf(userDAO).addSubstance(user);
 						
 			}
 			});
 	   	    UserService userService = new UserService ();
-	   	    userService.setUserGenericDao(userGenericDAO);
+	   	    userService.setUserDao(userDAO);
 	   	    userService.addUser("Константин", "Шаплыко", "k336699k@mail.ru", "123456");
 	  	}
 	

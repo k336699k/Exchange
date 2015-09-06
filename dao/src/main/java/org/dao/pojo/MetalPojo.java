@@ -1,20 +1,39 @@
-package org.entity;
+package org.dao.pojo;
 
-import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Metal implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+@Entity
+@Table(name = "metals")
+public class MetalPojo {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	@Basic(optional = false)
 	private int iD;
+	
+	@Column(name = "title")
 	private String title;
+	
+	@Column(name = "quantity")
 	private String quantity;
+	
+	@Column(name = "price")
 	private int price;
 
-	public Metal() {
+	public MetalPojo() {
 
 	}
 
-	public Metal( String title, String quantity, int price) {
+	public MetalPojo(String title, String quantity, int price) {
 		super();
 		
 		this.title = title;
@@ -56,7 +75,7 @@ public class Metal implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Metal [iD=" + iD + ", title=" + title + ", " + "quantity=" + quantity + ", price=" + price + "]";
+		return "MetalPojo [iD=" + iD + ", title=" + title + ", " + "quantity=" + quantity + ", price=" + price + "]";
 	}
 
 	@Override
@@ -78,7 +97,7 @@ public class Metal implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Metal other = (Metal) obj;
+		MetalPojo other = (MetalPojo) obj;
 		if (iD != other.iD)
 			return false;
 		if (price != other.price)

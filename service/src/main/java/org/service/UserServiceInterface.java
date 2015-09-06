@@ -1,5 +1,7 @@
 package org.service;
 
+import java.sql.SQLException;
+
 import org.entity.User;
 
 public interface UserServiceInterface {

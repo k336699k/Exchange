@@ -5,8 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dao.database.dao.GenericDao;
-import org.dao.database.dao.MetalDao;
+import org.dao.MetalDao;
+import org.dao.iterface.GenericDao;
+import org.dao.iterface.MetalDaoInterface;
 import org.entity.Metal;
 import org.entity.User;
 import org.jmock.Expectations;
@@ -18,7 +19,8 @@ public class MetalServiceTest {
 	
 	private Mockery context = new JUnit4Mockery();
 	final GenericDao <Metal> metalGenericDAO= context.mock(GenericDao.class);
-	
+	final MetalDaoInterface metalDAO= context.mock(MetalDaoInterface.class);
+
 	@Test
 	public void testReadSubstances() {
 	 
@@ -60,12 +62,12 @@ public class MetalServiceTest {
 		final Metal metal = new Metal ("Арматура 19", "2 т", 3000);
 		context.checking(new Expectations() {
 			{
-				oneOf(metalGenericDAO).addSubstance(metal);
+				oneOf(metalDAO).addSubstance(metal);
 						
 			}
 			});
 		    MetalService metalService = new MetalService();
-		    metalService.setMetalGenericDao( metalGenericDAO);
+		    metalService.setMetalDao( metalDAO);
 		    metalService.addMetal("Арматура 19", "2 т", 3000);
 	  	}
 	@Test
