@@ -49,6 +49,7 @@ public class TestDao {
 		System.out.println(roleGenericDao .readSubstances());
 		roleGenericDao .removeSubstance("Начальник");
 		System.out.println(roleDao.getRoleByUser("k336699k@mail.ru"));
+		System.out.println("kjdnkddjkb");
 
 	}
 
