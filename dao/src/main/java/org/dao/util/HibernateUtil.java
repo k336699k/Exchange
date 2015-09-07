@@ -6,26 +6,28 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
-	private static final SessionFactory sessionFactory;
-	private static final ServiceRegistry serviceRegistry;
 
-	
-	static {
-		try {
-			Configuration configuration = new Configuration();
-			configuration.configure();
-			serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+    private static final SessionFactory sessionFactory = buildSessionFactory();
 
-			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+    private static SessionFactory buildSessionFactory() {
+        try {
+            // Create the SessionFactory from hibernate.cfg.xml
+        	Configuration configuration = new Configuration().configure();
+        	StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
+        	applySettings(configuration.getProperties());
+        	SessionFactory factory = configuration.buildSessionFactory(builder.build());
+        	
+        	return factory;
+        }
+        catch (Throwable ex) {
+            // Make sure you log the exception, as it might be swallowed
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-		} catch (Throwable ex) {
-			System.err.println("Initial SessionFactory creation failed.+" + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	public static SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
 }
