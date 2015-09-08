@@ -41,6 +41,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 	public void addSubstance(User user) {
 		UserPojo userPojo = new UserPojo();
 		userPojo = ConvetrToClass.convetrToUserPojo(user);
+		
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -131,6 +132,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 		} catch (Exception e) {
 			new DAOException(e);
 			LOGGER.error("DAOException", e);
+			return null;
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();

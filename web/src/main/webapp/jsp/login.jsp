@@ -16,6 +16,7 @@
     ${nullPage}
     <br/>
     <input type="submit" value="<fmt:message key="login.button"/>"/>
+
     
 </form><hr/>
 <a href="controller?command=add_user"><fmt:message key="login.href.registration"/></a>

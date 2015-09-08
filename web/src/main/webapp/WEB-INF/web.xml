@@ -42,7 +42,7 @@
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>ServletSecurityFilter</filter-name>
-		<url-pattern>/Controller</url-pattern>
+		<url-pattern>/controller</url-pattern>
 	</filter-mapping>
 
 	<servlet>

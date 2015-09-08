@@ -31,14 +31,14 @@ public class ServletSecurityFilter implements Filter {
 
 		String login = (String) session.getAttribute("login");
 		String paramCommand = request.getParameter("command");
-		// System.out.println(paramCommand);
+		
 
 		if (paramCommand == null) {
 			resp.sendRedirect(req.getContextPath() + indexPath);
 		} else if (paramCommand.compareTo("login") == 0) {
 			chain.doFilter(request, response);
-		} else if (login != null) {
-			// System.out.println(login);
+		} else if (login != null ) {
+			
 			chain.doFilter(request, response);
 		} else {
 			resp.sendRedirect(req.getContextPath() + indexPath);

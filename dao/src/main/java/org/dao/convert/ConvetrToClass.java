@@ -14,11 +14,13 @@ public class ConvetrToClass {
 
 	public static User convetrToUser(UserPojo userPojo) {
 		User user = new User();
-		user.setiD(userPojo.getiD());
+		if (userPojo !=null){
+	    user.setiD(userPojo.getiD());
 		user.setFirstName(userPojo.getFirstName());
 		user.setLastName(userPojo.getLastName());
 		user.setLogin(userPojo.getLogin());
 		user.setPassword(userPojo.getPassword());
+		}
 		return user;
 	}
 
