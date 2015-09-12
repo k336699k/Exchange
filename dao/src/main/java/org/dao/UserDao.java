@@ -17,6 +17,7 @@ import org.dao.pojo.UserPojo;
 import org.dao.util.HibernateUtil;
 import org.entity.Role;
 import org.entity.User;
+import org.exception.TechnicalException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.resource.SqlManager;
@@ -38,18 +39,22 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 		return instance;
 	}
 
-	public void addSubstance(User user) {
+	public boolean addSubstance(User user) {
+		boolean flag = false;
+		User userNew = new User();
+		userNew = getUser (user.getLogin(), user.getPassword());
+		if (userNew.getLogin() == null) {
 		UserPojo userPojo = new UserPojo();
 		userPojo = ConvetrToClass.convetrToUserPojo(user);
-		
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 			session.save(userPojo);
 			session.getTransaction().commit();
+			flag = true;
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in addSubstance", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -57,6 +62,10 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 				session.close();
 			}
 		}
+		} else {
+			flag = false;
+		}
+		return flag;
 	}
 
 	public User findSubstance(String login) {
@@ -71,7 +80,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			userPojo = (UserPojo) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in findSubstance", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -89,7 +98,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			session = HibernateUtil.getSessionFactory().openSession();
 			usersPojo = session.createCriteria(UserPojo.class).list();
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in readSubstances", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -109,7 +118,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			session.delete(userPojo);
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in removeSubstance", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -130,7 +139,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			userPojo = (UserPojo) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in getUser", e);
 			LOGGER.error("DAOException", e);
 			return null;
 		} finally {
@@ -157,7 +166,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			session.update(userPojo);
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in updateSubstance", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -182,7 +191,7 @@ public class UserDao implements UserDaoInterface, GenericDao<User> {
 			session.getTransaction().commit();
 
 		} catch (Exception e) {
-			new DAOException(e);
+			new TechnicalException("Exception in getUserByRole", e);
 			LOGGER.error("DAOException", e);
 		} finally {
 			if (session != null && session.isOpen()) {

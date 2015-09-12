@@ -44,19 +44,23 @@ public class ConvetrToClass {
 	
 	public static MetalPojo convetrToMetalPojo(Metal metal) {
 		MetalPojo metalPojo = new MetalPojo();
+		
 		metalPojo.setiD(metal.getiD());
 		metalPojo.setTitle(metal.getTitle());
 		metalPojo.setQuantity(metal.getQuantity());
 		metalPojo.setPrice(metal.getPrice());
+		
 		return metalPojo;
 	}
 	
 	public static Metal convetrToMetal(MetalPojo metalPojo) {
 		Metal metal = new Metal();
+		if (metalPojo !=null){
 		metal.setiD(metalPojo.getiD());
 		metal.setTitle(metalPojo.getTitle());
 		metal.setQuantity(metalPojo.getQuantity());
 		metal.setPrice(metalPojo.getPrice());
+		}
 		return metal;
 	}
 	

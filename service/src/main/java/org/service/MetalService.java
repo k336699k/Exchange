@@ -60,10 +60,11 @@ public class MetalService implements MetalServiceInterface {
 
 
 	@Override
-	public void addMetal(String title, String quantity, int price) {
+	public boolean addMetal(String title, String quantity, int price) {
 		Metal metal = new Metal(title, quantity, price);
-		getMetalDao().addSubstance(metal);
+	//	getMetalDao().addSubstance(metal);
 		LOGGER.info("Metal added, its name: " + title);
+		return getMetalDao().addSubstance(metal);
 	}
 	
 	

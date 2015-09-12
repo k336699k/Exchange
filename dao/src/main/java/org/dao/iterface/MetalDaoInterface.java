@@ -6,6 +6,6 @@ import org.entity.Metal;
 
 public interface MetalDaoInterface {
 	
-	void addSubstance(Metal metal) ;
+	boolean addSubstance(Metal metal) ;
 
 }

@@ -40,16 +40,17 @@ public class UserServiceTest {
 	@Test
 	public void testAddUser() {
 	//	final GenericDao <User> userGenericDAO= context.mock(GenericDao.class);
-		final User user = new User("Константин", "Шаплыко", "k336699k@mail.ru", "123456");
+		final User user = new User("Иван", "Иванов", "kk@mail.ru", "1456");
 		context.checking(new Expectations() {
 			{
 				oneOf(userDAO).addSubstance(user);
-						
+				
 			}
 			});
 	   	    UserService userService = new UserService ();
 	   	    userService.setUserDao(userDAO);
-	   	    userService.addUser("Константин", "Шаплыко", "k336699k@mail.ru", "123456");
+	      	 userService.addUser("Иван", "Иванов", "kk@mail.ru", "1456");
+	   
 	  	}
 	
 	@Test

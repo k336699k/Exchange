@@ -15,7 +15,7 @@
     <br/>
     ${errorAddMetal}
     <br/>
-    ${wrongAction}
+    ${errorUseMetal}
     <br/>
     ${nullPage}
     <br/>

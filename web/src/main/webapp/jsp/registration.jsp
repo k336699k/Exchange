@@ -15,9 +15,9 @@
     <br/><fmt:message key="registration.user.password"/><br/>
     <input type="text" name="password" value=""/>
     <br/>
-    ${errorAddMetal}
+    ${errorInputDataMessage}
     <br/>
-    ${wrongAction}
+    ${errorRegistration}
     <br/>
     ${nullPage}
     <br/>

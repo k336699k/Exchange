@@ -12,6 +12,6 @@ public interface UserServiceInterface {
 
 	void deleteUser(String login);
 
-	void addUser(String firstName, String lastName, String login, String password);
+	boolean addUser(String firstName, String lastName, String login, String password);
 
 }

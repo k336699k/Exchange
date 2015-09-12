@@ -6,7 +6,7 @@ import org.entity.Metal;
 
 public interface MetalServiceInterface {
 
-	void addMetal(String title, String quantity, int price);
+	boolean addMetal(String title, String quantity, int price);
 
 	Metal findSubstance(String title);
 

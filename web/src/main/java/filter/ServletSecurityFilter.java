@@ -35,7 +35,7 @@ public class ServletSecurityFilter implements Filter {
 
 		if (paramCommand == null) {
 			resp.sendRedirect(req.getContextPath() + indexPath);
-		} else if (paramCommand.compareTo("login") == 0) {
+		} else if ((paramCommand.compareTo("login") == 0) || (paramCommand.compareTo("add_user")==0) || (paramCommand.compareTo("save_user")==0))  {
 			chain.doFilter(request, response);
 		} else if (login != null ) {
 			

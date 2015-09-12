@@ -65,10 +65,11 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public void addUser(String firstName, String lastName, String login, String password) {
+	public boolean addUser(String firstName, String lastName, String login, String password) {
 		User user = new User(firstName, lastName, login, password);
-		getUserDao().addSubstance(user);
+	//	getUserDao().addSubstance(user);
 		LOGGER.info("launched method addUser() in UserService");
+		return getUserDao().addSubstance(user);
 	}
 	
 	private static String getEncryptUser(String message) {

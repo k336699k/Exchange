@@ -11,5 +11,5 @@ public interface UserDaoInterface {
 	 User getUser(String login, String password);
 	 Collection getUserByRole(String role);
 	 void updateSubstance(String login, String role);
-	 void addSubstance(User user);
+	 boolean addSubstance(User user);
 }

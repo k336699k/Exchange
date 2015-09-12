@@ -12,6 +12,7 @@ import org.dao.iterface.MetalDaoInterface;
 import org.dao.pojo.MetalPojo;
 import org.dao.util.HibernateUtil;
 import org.entity.Metal;
+import org.entity.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.resource.SqlManager;
@@ -35,7 +36,11 @@ public class MetalDao implements MetalDaoInterface, GenericDao<Metal> {
 
 	
 	
-	public void addSubstance(Metal metal) {
+	public boolean addSubstance(Metal metal) {
+		boolean flag = false;
+		Metal metalNew = new Metal();
+		metalNew = findSubstance (metal.getTitle());
+		if (metalNew.getTitle() == null){
 		MetalPojo metalPojo = new MetalPojo();
 		metalPojo = ConvetrToClass.convetrToMetalPojo(metal);
 		Session session = null;
@@ -44,6 +49,7 @@ public class MetalDao implements MetalDaoInterface, GenericDao<Metal> {
 			session.beginTransaction();
 			session.save(metalPojo);
 			session.getTransaction().commit();
+			flag = true;
 		} catch (Exception e) {
 			new DAOException(e);
 			LOGGER.error("DAOException", e);
@@ -53,6 +59,10 @@ public class MetalDao implements MetalDaoInterface, GenericDao<Metal> {
 				session.close();
 			}
 		}
+		} else {
+			flag = false;
+		}
+		return flag;
 	}
 
 	public Metal findSubstance(String title) {
@@ -67,6 +77,7 @@ public class MetalDao implements MetalDaoInterface, GenericDao<Metal> {
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
