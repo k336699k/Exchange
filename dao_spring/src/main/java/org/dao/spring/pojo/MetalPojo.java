@@ -1,28 +1,39 @@
-package org.entity;
+package org.dao.spring.pojo;
 
-import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import javax.validation.constraints.Pattern;
 
-public class Metal implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+@Entity
+@Table(name = "metals")
+public class MetalPojo {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	@Basic(optional = false)
 	private int iD;
-	@Pattern(regexp="^[а-яА-ЯёЁa-zA-Z0-9]+$" , message="Wrong name, must be with no spaces")
+	
+	@Column(name = "title")
 	private String title;
-	@Pattern(regexp="^[0-9а-яА-ЯёЁa-zA-Z]+$" , message="Wrong quantity, must be with no spaces")
+	
+	@Column(name = "quantity")
 	private String quantity;
 	
+	@Column(name = "price")
 	private int price;
-	
-	@Pattern(regexp="^[1-9]{1}\\d*$" , message="Wrong number, must be with no spaces")
-	private String priceString;
 
-	public Metal() {
+	public MetalPojo() {
 
 	}
 
-	public Metal( String title, String quantity, int price) {
+	public MetalPojo(String title, String quantity, int price) {
 		super();
 		
 		this.title = title;
@@ -61,20 +72,10 @@ public class Metal implements Serializable {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	
-	
-
-	public String getPriceString() {
-		return priceString;
-	}
-
-	public void setPriceString(String priceString) {
-		this.priceString = priceString;
-	}
 
 	@Override
 	public String toString() {
-		return "Metal [iD=" + iD + ", title=" + title + ", " + "quantity=" + quantity + ", price=" + price + "]";
+		return "MetalPojo [iD=" + iD + ", title=" + title + ", " + "quantity=" + quantity + ", price=" + price + "]";
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class Metal implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Metal other = (Metal) obj;
+		MetalPojo other = (MetalPojo) obj;
 		if (iD != other.iD)
 			return false;
 		if (price != other.price)

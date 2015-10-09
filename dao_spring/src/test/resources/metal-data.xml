@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <metals id="1" title="Арматура 50" quantity="30 т" price="20000" />
+    <metals id="2" title="Арматура 60" quantity="10 т" price="10000" />
+</dataset>

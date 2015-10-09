@@ -1,42 +1,55 @@
-package org.entity;
+package org.dao.spring.pojo;
 
-import java.io.Serializable;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.constraints.Pattern;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 
-
-
-public class User implements Serializable {
+@Entity
+@Table(name = "users")
+public class UserPojo {
 	
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int iD;
-	@Pattern(regexp="^[а-яА-ЯёЁa-zA-Z0-9]+$" , message="Wrong name, must be with no spaces")
-	private String firstName;
-	@Pattern(regexp="^[а-яА-ЯёЁa-zA-Z0-9]+$" , message="Wrong password, must be with no spaces")
-	private String lastName;
-	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-			   + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$" , message="Useraname look has form like email ")
-	private String login;
-	@Pattern(regexp="^[а-яА-ЯёЁa-zA-Z0-9]+$" , message="Wrong password, must be with no spaces")
-	private String password;
-	private Set<Role> roles = new HashSet<>();
 	
-	public User() {
+	@Column(name = "first_name")
+	private String firstName;
+	
+	@Column(name = "last_name")
+	private String lastName;
+	
+	@Column(name = "login")
+	private String login;
+	
+	@Column(name = "password")
+	private String password;
+	
+	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	 @JoinTable(name = "users_roles",
+	    joinColumns = {@JoinColumn (name = "user_id")},
+	    inverseJoinColumns = {@JoinColumn(name = "role_id")})
+//	private Set roles = new HashSet();
+	private Set<RolePojo> roles = new HashSet<>();
+	
+
+	public UserPojo() {
 	}
 
-	
-	public User(String firstName, String lastName, String login, String password) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.login = login;
-		this.password = password;
-	}
-	
-	public User(int iD, String firstName, String lastName, String login, String password) {
+	public UserPojo(int iD, String firstName, String lastName, String login, String password) {
 		super();
 		this.iD = iD;
 		this.firstName = firstName;
@@ -45,17 +58,13 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	
-	
-	public Set<Role> getRoles() {
-		return roles;
+	public UserPojo(String firstName, String lastName, String login, String password) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.login = login;
+		this.password = password;
 	}
-
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
 
 	public int getiD() {
 		return iD;
@@ -99,6 +108,19 @@ public class User implements Serializable {
 
 	
 
+
+	public Set<RolePojo> getRoles() {
+		return roles;
+	}
+
+
+
+	public void setRoles(Set<RolePojo> roles) {
+		this.roles = roles;
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -119,7 +141,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserPojo other = (UserPojo) obj;
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
@@ -145,9 +167,10 @@ public class User implements Serializable {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
-		return "User [iD=" + iD + ", firstName=" + firstName + ", lastName=" + lastName + ", login=" + login
+		return "UserPojo [iD=" + iD + ", firstName=" + firstName + ", lastName=" + lastName + ", login=" + login
 				+ ", password=" + password + "]";
 	}
 
